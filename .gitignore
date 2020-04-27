@@ -9,3 +9,4 @@ nbdist/
 .nb-gradle/
 build.xml
 *.mf
+README/
