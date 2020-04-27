@@ -10,5 +10,13 @@ package dom;
  * @author URIEL
  */
 public class Proceso {
-    
+    private String nombre;
+    private int duracion;
+    private int llegada;
+    private int prioridad;
+    private int tiempoEspera;
+    private int quantum;
+    private boolean estado;
+    private Proceso sig;
+    private int quantumUsado;
 }
