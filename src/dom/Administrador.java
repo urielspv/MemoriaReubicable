@@ -19,9 +19,15 @@ public class Administrador {
         
     }
     
-    
+    private void compactacion(){
+        
+    }
     private void reubicacion(){
         
+        
+    }
+    
+    private void verifica(){
         
     }
            
