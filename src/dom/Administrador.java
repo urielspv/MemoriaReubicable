@@ -5,24 +5,65 @@
  */
 package dom;
 
-/*
-VAMOS A MORIR TODOOOOOOOS
-Probando por el bash de git
-*/
+import java.util.ArrayList;
+import java.util.Iterator;
 
-// pues creo que funciona 
 
 /**
  *
  * @author URIEL
  */
 public class Administrador {
+    ArrayList<Particion> RAM;
     
-    private void crea(int direccion, int tamaño){
+    int so;
+    int tamanio;
+    int numPart = 0;
+    int numAL;
+    
+    public Administrador(int tamanio,int so){
+        this.tamanio = tamanio;
+        this.so = so;
+        creaAL(0,tamanio);
+        
+        
         
     }
     
-    private void elimina(Particion part){
+    private void AsignaRAM(int direccion, int tamaño, Proceso p){
+        ParticionAsignada part = new ParticionAsignada(numPart,direccion, p );
+        RAM.add(part);
+        this.numPart ++;
+
+    }
+    private void creaAL(int dir, int tamanio){
+        AreaLibre AL = new AreaLibre(dir,tamanio);
+        RAM.add(AL);
+        this.numAL++;
+        
+    }
+    
+    private  int solicitaRAM(int tam){
+        int pos = 0;
+        Iterator<Particion> i = RAM.iterator();
+        while(i.hasNext()){
+        Particion p = i.next();
+        
+        if((p.tamanio>= tam)&&(p.estado =='D')){
+            pos = p.base;
+        }
+        }
+        
+        
+        return pos;
+    }
+    
+        
+
+     
+
+  
+    private void elimina(ParticionAsignada part){
         
     }
     
@@ -36,6 +77,10 @@ public class Administrador {
     
     private void verifica(){
         
+    }
+    private int mejorajuste(){
+        int numpart = 0;
+        return numpart;
     }
            
 }

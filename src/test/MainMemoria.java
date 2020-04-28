@@ -6,6 +6,10 @@
 package test;
 
 import dom.Administrador;
+import dom.Lector;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -17,7 +21,9 @@ public class MainMemoria {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        
+        
         Scanner in = new Scanner(System.in);
         int ram,so;
         //Definemos valores iniciales
@@ -25,9 +31,13 @@ public class MainMemoria {
         ram = in.nextInt();
         System.out.print("Ingresa el tamaño del SO: ");
         so = in.nextInt();
+        Administrador adm = new Administrador(ram, so);
         
-        Administrador adm = new Administrador();
         
+        File f = new File("src/datos.CSV");
+        Lector lec = new Lector();
+        ArrayList<String> Evento = new ArrayList<String>();
+        Evento = lec.leerArchivo(f);
         
     }
     
