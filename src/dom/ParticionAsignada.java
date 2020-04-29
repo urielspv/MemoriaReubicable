@@ -11,22 +11,21 @@ package dom;
  */
 public class ParticionAsignada extends Particion{
     
-    private Proceso procesoAsig;
+    private String procesoAsig;
    
-   public  ParticionAsignada(int id,int base, Proceso proceso){
+   public  ParticionAsignada(int id,int base, String proceso, int tamanio){
        this.estado = 'A';
        this.id = id;
        this.base = base;
        this.procesoAsig = proceso;
-       this.limite = base + procesoAsig.getTamanio();
-       
+       this.tamanio = tamanio;
        
    }
    
     @Override
     public void imprime(){
         
-        System.out.print(""+id+"  "+base+"   "+tamanio+"  "+estado+"   "+procesoAsig.getNombre());
+        System.out.print(""+id+"  "+base+"   "+tamanio+"  "+estado+"   "+procesoAsig);
        
    }
 
@@ -41,11 +40,8 @@ public class ParticionAsignada extends Particion{
     public int getTamaño() {
         return tamanio;
     }
-
-   
     
-
-    public Proceso getProcesoAsig() {
+    public String getProcesoAsig() {
         return procesoAsig;
     }
 
@@ -66,7 +62,7 @@ public class ParticionAsignada extends Particion{
 
    
 
-    public void setProceso(Proceso proceso) {
+    public void setProceso(String proceso) {
         this.procesoAsig = proceso;
     }
     

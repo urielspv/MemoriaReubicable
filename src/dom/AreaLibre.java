@@ -12,7 +12,8 @@ package dom;
 public class AreaLibre extends Particion{
    private int orden;
    
-    public AreaLibre(int base, int tamanio){
+    public AreaLibre(int id,int base, int tamanio){
+        this.id = id;
         this.base = base;
         this.tamanio = tamanio;
         this.estado ='D';
@@ -31,8 +32,7 @@ public class AreaLibre extends Particion{
         return 0;
     }
     public void imprime(){
-        System.out.println("Num   Localidad   Tamaño   Estado   Orden ");
-        System.out.println(""+id+"  "+base+"   "+tamanio+"  "+estado+"  "+orden+"");
+        System.out.print(""+id+"  "+base+"   "+tamanio+"  "+estado+"  "+orden+"");
        
    }
 

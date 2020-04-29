@@ -35,7 +35,7 @@ public class MainMemoria {
         ram = in.nextInt();
         System.out.print("Ingresa el tamaño del SO: ");
         so = in.nextInt();
-        Administrador adm = new Administrador(ram, so);
+        Administrador AM = new Administrador(ram, so);
         
         
         File f = new File("src/datos.CSV");
@@ -56,29 +56,34 @@ public class MainMemoria {
             
             String  evento = Eventos.get(0);
             StringTokenizer st = new StringTokenizer(evento, ",");
-            String orden = st.nextToken();
+            String instr = st.nextToken();
             
              //Acciones si el evento es llegada (Acciones del Administrador)
-            if (orden.equals("L")){
-            
-           
-            
-            
-            
-            
-            
-            
-            
+            if (instr.equals("L")){
                 
-            }
+                String proceso = st.nextToken();
+                int tamanio = Integer.parseInt(st.nextToken());
+                
+                System.out.println("\n\n\nEvento: Llega  P"+proceso+"  requiere "+tamanio+"k");
+                if (AM.AsignaRAM(tamanio, proceso)) {
+                    System.out.println("Great");
+                }
+                
+               
+                
+                }
+                
             
             //Acciones si el evento es Termina (Elimina el proceso y recuperacion de memoria)
             else{
+                String proceso = st.nextToken();
+               
+                System.out.println("\n\n\nEvento: Termina P"+proceso+"");
                 
                 
                 
             }
-            
+            AM.imprimeRAM();
             Eventos.remove(0);
             
                
