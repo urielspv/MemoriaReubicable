@@ -16,26 +16,9 @@ public class AreaLibre extends Particion{
         this.id = id;
         this.base = base;
         this.tamanio = tamanio;
+        this.limite = (this.base + this.tamanio);
         this.estado ='D';
         
     }
-
-
-    @Override
-    public int compareTo(Particion o) {
-        if (tamanio < o.tamanio) {
-                return -1;
-            }
-            if (tamanio > o.tamanio) {
-                return 1;
-            }
-        return 0;
-    }
-    public void imprime(){
-        System.out.print(""+id+"  "+base+"   "+tamanio+"  "+estado+"  "+orden+"");
-       
-   }
-
-  
     
 }

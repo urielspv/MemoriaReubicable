@@ -11,7 +11,7 @@ package dom;
  */
 public class ParticionAsignada extends Particion{
     
-    private String procesoAsig;
+   
    
    public  ParticionAsignada(int id,int base, String proceso, int tamanio){
        this.estado = 'A';
@@ -19,16 +19,11 @@ public class ParticionAsignada extends Particion{
        this.base = base;
        this.procesoAsig = proceso;
        this.tamanio = tamanio;
-       
-   }
-   
-    @Override
-    public void imprime(){
-        
-        System.out.print(""+id+"  "+base+"   "+tamanio+"  "+estado+"   "+procesoAsig);
-       
-   }
+       this.limite = (this.base + this.tamanio);
 
+       
+   }
+ 
     public int getId() {
         return id;
     }

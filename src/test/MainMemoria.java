@@ -7,7 +7,7 @@ package test;
 
 import dom.Administrador;
 import dom.Lector;
-import dom.Proceso;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class MainMemoria {
      * @param args the command line arguments
      */
     @SuppressWarnings("empty-statement")
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         
         
         Scanner in = new Scanner(System.in);
@@ -41,7 +41,6 @@ public class MainMemoria {
         File f = new File("src/datos.CSV");
         Lector lec = new Lector();
         ArrayList<String> Eventos = new ArrayList<String>();
-        ArrayList<Proceso> Procesos = new ArrayList<Proceso>() ; 
         Eventos = lec.leerArchivo(f);
         Iterator<String> i = Eventos.iterator();
         
@@ -66,25 +65,36 @@ public class MainMemoria {
                 
                 System.out.println("\n\n\nEvento: Llega  P"+proceso+"  requiere "+tamanio+"k");
                 if (AM.AsignaRAM(tamanio, proceso)) {
-                    System.out.println("Great");
+                    System.out.println("");
+                    Thread.sleep(5000);
+                    Eventos.remove(0);
                 }
-                
-               
-                
+                else{
+                   /*Verificar que existe espacio suficiente para hacer la compactacion del area libre
+                    y hacer la compactacion
+                    */
+                   
+                   
+                }
+                 
                 }
                 
             
             //Acciones si el evento es Termina (Elimina el proceso y recuperacion de memoria)
-            else{
+            if (instr.equals("T")){
+
                 String proceso = st.nextToken();
                
                 System.out.println("\n\n\nEvento: Termina P"+proceso+"");
-                
+                AM.RecuperaMemoria(proceso);
+                Thread.sleep(5000);
+                Eventos.remove(0);
                 
                 
             }
             AM.imprimeRAM();
-            Eventos.remove(0);
+            Thread.sleep(5000);
+            
             
                
         }

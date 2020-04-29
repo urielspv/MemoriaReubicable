@@ -9,17 +9,29 @@ package dom;
  *
  * @author URIEL
  */
-public abstract class Particion implements Comparable<Particion> {
+public  class Particion implements Comparable<Particion> {
     protected int tamanio;
     protected int base;
     protected int limite;
     protected int id;
     protected char estado;
+    protected String procesoAsig;
+
+    @Override
+   
+    public int compareTo(Particion o) {
+        if (base < o.base) {
+                return -1;
+            }
+            if (base > o.base) {
+                return 1;
+            }
+        return 0;    }
     
     /**
      *
      */
-    public abstract void imprime();
+    
   
     
     
