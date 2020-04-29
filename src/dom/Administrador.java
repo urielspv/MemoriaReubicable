@@ -30,27 +30,57 @@ public class Administrador {
         
     }
     
-    private void AsignaRAM(int direccion, int tamaño, Proceso p){
-        ParticionAsignada part = new ParticionAsignada(numPart,direccion, p );
-        RAM.add(part);
-        this.numPart ++;
+    private void AsignaRAM(int tamaño, Proceso p){
+        
 
     }
-    private void creaAL(int dir, int tamanio){
-        AreaLibre AL = new AreaLibre(dir,tamanio);
-        RAM.add(AL);
+    
+    private  void creaPA(int dir, int tamanio){
+        
+        AreaLibre AL;
+        
+        AL = new AreaLibre(dir,tamanio);
+      
         this.numAL++;
+        System.out.println(""+numAL);
         
     }
+    /**
+     *@param dir
+     *@param tamanio
+     * 
+     **/
+    private  void creaAL(int dir, int tamanio){
+        
+        AreaLibre AL;
+        
+        AL = new AreaLibre(dir,tamanio);
+      
+        this.numAL++;
+        System.out.println(""+numAL);
+        
+    }
+   
     
-    private  int solicitaRAM(int tam){
+    /**
+     * Solicita espacio RAM com Mejor Ajuste
+     * @param tam 
+     * @return 
+     */
+    public int solicitaRAM(int tam){
         int pos = 0;
+        int ma = 0;
         Iterator<Particion> i = RAM.iterator();
         while(i.hasNext()){
         Particion p = i.next();
         
         if((p.tamanio>= tam)&&(p.estado =='D')){
-            pos = p.base;
+            if (p.tamanio > ma){
+                pos = p.base;
+                ma = p.tamanio;
+            }
+            
+            
         }
         }
         
@@ -63,7 +93,13 @@ public class Administrador {
      
 
   
-    private void elimina(ParticionAsignada part){
+    private void RecuperaMemoria(ParticionAsignada part){
+        
+    }
+    /**
+     * Verifica la contiguidad de una particion
+     */
+    private void VerifContig(int direccion){
         
     }
     
@@ -74,13 +110,7 @@ public class Administrador {
         
         
     }
-    
-    private void verifica(){
-        
-    }
-    private int mejorajuste(){
-        int numpart = 0;
-        return numpart;
-    }
+   
+   
            
 }

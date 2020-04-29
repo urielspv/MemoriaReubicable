@@ -25,8 +25,8 @@ public class ParticionAsignada extends Particion{
    
     @Override
     public void imprime(){
-        System.out.println("Num   Localidad   Tamaño   Estado   Proceso ");
-        System.out.println(""+id+"  "+base+"   "+tamanio+"  "+estado+"   "+procesoAsig.getNombre());
+        
+        System.out.print(""+id+"  "+base+"   "+tamanio+"  "+estado+"   "+procesoAsig.getNombre());
        
    }
 

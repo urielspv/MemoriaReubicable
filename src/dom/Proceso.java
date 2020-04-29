@@ -10,32 +10,38 @@ package dom;
  * @author URIEL
  */
 public class Proceso {
-    private String nombre;
-    private boolean activo;
+    private int nombre;
+    
     private int tamanio;
+    public Proceso(int id, int tamanio){
+        this.nombre = id;
+        this.tamanio = tamanio;
+        
+    }
 
-    public void setNombre(String nombre) {
+    public void setNombre(int nombre) {
         this.nombre = nombre;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
+   
 
     public void setTamanio(int tamanio) {
         this.tamanio = tamanio;
     }
 
-    public String getNombre() {
+    public int getNombre() {
         return nombre;
     }
 
-    public boolean isActivo() {
-        return activo;
-    }
-
+   
     public int getTamanio() {
         return tamanio;
     }
+    
+    public void imprime(){
+        
+        System.out.println("  "+nombre+"        "+tamanio);
+    }
+    
     
 }
