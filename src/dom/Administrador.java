@@ -35,20 +35,21 @@ public class Administrador  {
         int pos = solicitaRAM(tamanio);
          Iterator<Particion> i = RAM.iterator();
         if ( pos != 0){
-            Thread.sleep(3000);
+            Thread.sleep(2000);
 //            imprimeRAM();
             System.out.println("\nArea Libre encontrada en la posición: "+pos+"\n");
-            Thread.sleep(5000);
+            Thread.sleep(2000);
             
             Particion part;
             while(i.hasNext()){
                  part = i.next();
                 if(part.base == pos ){      //busca dentro de las particiones la coincidencia con la posicion encontrada.
                     if ((part.tamanio - tamanio)>0){        //Compara si el tamaño es del mismo tamaño o es más grande el area libre.
+                        numAL--;
                         creaPA(part.base,tamanio,p);
                         creaAL(part.base+tamanio, part.tamanio-tamanio);
                         RAM.remove(part);
-                        numAL--;
+                        
                         break;
                     }
                     else{
@@ -163,9 +164,29 @@ public class Administrador  {
        
     }
     
-    private void compactacion(){
+    public boolean ExisteEspacio(int tamanio){
+        if(totalDisp >= tamanio){
+            return true;
+        }
+        else{
+            return false;
+        }
         
     }
+    
+    public void compactacion(){
+        ArrayList<Particion> temp;
+        temp = new ArrayList();
+        Iterator<Particion> h = RAM.iterator();
+         while(h.hasNext()){
+             Particion p = h.next();
+             
+             
+         }
+    }
+
+    
+    
 
     
     public void imprimeRAM() throws InterruptedException{
