@@ -45,13 +45,11 @@ public class MainMemoria {
         Iterator<String> i = Eventos.iterator();
         
         
-        
-        
 //        while(i.hasNext()){
 //            System.out.println(""+i.next());
 //        }
-
         while(!Eventos.isEmpty()){
+            
             
             String  evento = Eventos.get(0);
             StringTokenizer st = new StringTokenizer(evento, ",");
@@ -66,7 +64,7 @@ public class MainMemoria {
                 System.out.println("\n\n\nEvento: Llega  P"+proceso+"  requiere "+tamanio+"k");
                 if (AM.AsignaRAM(tamanio, proceso)) {
                     System.out.println("");
-                    Thread.sleep(3000);
+                    Thread.sleep(100);
                     Eventos.remove(0);
                 }
                 else{
@@ -75,29 +73,30 @@ public class MainMemoria {
                     */
                     if(AM.ExisteEspacio(tamanio)){
                         AM.compactacion();
+                        System.out.println("\n\n\nEvento: Llega  P"+proceso+"  requiere "+tamanio+"k");
+                        AM.AsignaRAM(tamanio, proceso);
+                         Eventos.remove(0);
                     }
                     else{
                         System.out.println("Memoria Insuficiente");
                     }
-                    
-                  
-                    
-                 
                 }
+                AM.imprimeRAM();
                 }
             //Acciones si el evento es Termina (Elimina el proceso y recuperacion de memoria)
             if (instr.equals("T")){
                 String proceso = st.nextToken();
                 System.out.println("\n\n\nEvento: Termina P"+proceso+"");
                 AM.RecuperaMemoria(proceso);
-                Thread.sleep(2000);
+                Thread.sleep(100);
                 Eventos.remove(0);
+                AM.imprimeRAM();
             }
-            AM.imprimeRAM();
-            Thread.sleep(3000);
-               
+            
+            Thread.sleep(100);
+   
         }
-        System.out.println("");
+       
     }
     
 }

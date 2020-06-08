@@ -1,25 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dom;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
-/**
- *
- * @author URIEL
- */
 public class Administrador  {
     ArrayList<Particion> RAM;
     private int so;
-    private int tamanioRAM;
+    public int tamanioRAM;
     private int numPA;
     private int numAL;
     private int totalDisp;
+    private int numElim;
+    
     
     public Administrador(int tamanio,int so){
         RAM = new ArrayList();
@@ -27,17 +20,21 @@ public class Administrador  {
         this.numPA = 0;
         this.tamanioRAM = tamanio;
         this.so = so;
-        this.totalDisp = (this.tamanioRAM - so);
+        this.totalDisp = this.tamanioRAM - so;
+        this.numElim = 0;
         creaAL(so+1,this.totalDisp);
     }
     
     public boolean AsignaRAM(int tamanio, String p) throws InterruptedException {
+        
+        Thread.sleep(100);
+        imprimeRAM();
         int pos = solicitaRAM(tamanio);
          Iterator<Particion> i = RAM.iterator();
         if ( pos != 0){
-            Thread.sleep(2000);
+            Thread.sleep(100);
 //            imprimeRAM();
-            System.out.println("\nArea Libre encontrada en la posición: "+pos+"\n");
+            System.out.println("\n\nArea Libre encontrada en la dirección: ["+pos+"]\n");
             Thread.sleep(2000);
             
             Particion part;
@@ -47,9 +44,10 @@ public class Administrador  {
                     if ((part.tamanio - tamanio)>0){        //Compara si el tamaño es del mismo tamaño o es más grande el area libre.
                         numAL--;
                         creaPA(part.base,tamanio,p);
+                        System.out.println("Se asignó el Area Libre al proceso "+p);
                         creaAL(part.base+tamanio, part.tamanio-tamanio);
                         RAM.remove(part);
-                        
+                        ordenar();
                         break;
                     }
                     else{
@@ -57,21 +55,27 @@ public class Administrador  {
                         creaPA(part.base,part.tamanio, p);
                         RAM.remove(part);
                         numAL--;
+                        ordenar();
                     }
                 }
             }
+            
              return true;
                 }
         else{
-            System.out.println("No hay espacio disponible");
+            
+            System.out.println("\n\n\nNo Existe Partición Suficiente");
+            ordenar();
             return false;
         }
+        
     }
     
     private  void creaPA(int dir, int tamanio, String proceso){
         this.numPA++;
-        ParticionAsignada PA = new ParticionAsignada(numPA,dir,proceso,tamanio);
+        ParticionAsignada PA = new ParticionAsignada(numPA + numElim,dir,proceso,tamanio);
         RAM.add(PA);
+        ordenar();
 //        System.out.println("se agregó la PA"+RAM.get(RAM.size()-1).id);
         
     }
@@ -83,8 +87,9 @@ public class Administrador  {
      **/
     private  void creaAL(int dir, int tamanio){
         numAL++;
-        AreaLibre  AL = new AreaLibre(numAL, dir,tamanio);
+        AreaLibre  AL = new AreaLibre(numAL , dir,tamanio);
         RAM.add(AL);
+        ordenar();
     }
     
     
@@ -108,6 +113,7 @@ public class Administrador  {
      * @return 
      */
     public int solicitaRAM(int tam){
+        ordenar();
         int pos = 0;
         int ma = 0;
         Iterator<Particion> i = RAM.iterator();
@@ -124,44 +130,71 @@ public class Administrador  {
     }
 
   
-    public void RecuperaMemoria(String Proceso){
+    public void RecuperaMemoria(String Proceso) throws InterruptedException{
          Iterator<Particion> i = RAM.iterator();
          Particion p ;
+         imprimeRAM();
          while(i.hasNext()){
              p = i.next();
+             System.out.println("comparanto con "+p.procesoAsig);
+             if(p.procesoAsig != null){
              if(p.procesoAsig.equals(Proceso)){
+                 System.out.println("Sencontró" + Proceso);
                  creaAL(p.base, p.tamanio);
                  RAM.remove(p);
+                 numElim ++;
                  numPA--;
-                 System.out.println("Proceso Eliminado");
-                 RAM.sort((o1, o2) -> o1.compareTo(o2));
+                 System.out.println("\n\n\nProceso P"+Proceso+" Eliminado");
+                 
                  break;
              }
          }
+         }
+        
     }
     
     /**
      * Verifica la contiguidad de una particion
      */
-    private void VerifContig(AreaLibre AL){
-       
+    private void verificaContiguidad() throws InterruptedException{
+        int tamOriginal = RAM.size();
+        int cont =0;
         Iterator<Particion> h = RAM.iterator();
         while(h.hasNext()){
-            Particion p = h.next();
-            if(p.limite == AL.base){
-                creaAL(p.base, AL.limite);
-                RAM.remove(p);
-                RAM.remove(AL);
-                numAL--;
+            Particion aComparar = h.next();
+            
+            if(aComparar.estado == 'D'){
+            Iterator<Particion> segIndice = RAM.iterator();
+             int indice2 = RAM.size();
+             
+             int cont2 = 0;
+            
+            while(cont2 < indice2){
+                Particion comparador = segIndice.next();
+                if(comparador.estado == 'D'){ //Al encontrar la primer partición DISPONIBLE
+                    
+                    if(aComparar.base == comparador.limite){ // 
+                    numAL--;
+                    creaAL(comparador.base, aComparar.tamanio + comparador.tamanio);
+                    RAM.remove(aComparar);
+                    RAM.remove(comparador);
+                
+                    }
+                else{
+                    if(aComparar.limite == comparador.base ){
+                    numAL = numAL - 2;
+                    creaAL(aComparar.base, comparador.tamanio + aComparar.tamanio);
+                    RAM.remove(aComparar);
+                    RAM.remove(comparador);
+
+                }
+                }
             }
-            if(AL.limite == p.base){
-                creaAL(AL.base, p.limite);
-                RAM.remove(p);
-                RAM.remove(AL);
-                numAL--;
+                 cont2++;
             }
+            }
+            cont++;
         }
-       
     }
     
     public boolean ExisteEspacio(int tamanio){
@@ -174,15 +207,45 @@ public class Administrador  {
         
     }
     
-    public void compactacion(){
-        ArrayList<Particion> temp;
-        temp = new ArrayList();
-        Iterator<Particion> h = RAM.iterator();
-         while(h.hasNext()){
-             Particion p = h.next();
-             
-             
+    public void compactacion() throws InterruptedException{
+        System.out.println("La Memoria Se Compactará");
+        int base = so + 1;
+        int indice = RAM.size();
+        int cont =0;
+        Iterator<Particion> ItRAM = RAM.iterator();
+         while(cont < indice){
+             Particion p = ItRAM.next();
+             if(p.estado=='A'){
+                 p.base = base;
+                 p.limite = base + p.tamanio;
+                 base = base + p.tamanio;
+             }
+          
+             cont++;
          }
+         
+         Iterator<Particion> j = RAM.iterator();
+         cont = 0;
+         while(cont < indice){
+             
+             Particion l = j.next();
+             if(l.estado=='D'){
+                 l.base = base;
+                 l.limite = base + l.tamanio;
+               
+                 base = base + l.tamanio;
+             }
+             cont++;
+         }
+      
+         ordenar();
+         verificaContiguidad();
+         ordenar();
+    }
+    
+    
+    public void ordenar(){
+    RAM.sort((o1, o2) -> o1.compareTo(o2));
     }
 
     
@@ -190,23 +253,31 @@ public class Administrador  {
 
     
     public void imprimeRAM() throws InterruptedException{
+   
         Iterator<Particion> h = RAM.iterator();
-        System.out.println("-------------------------------------------------------------------");
+     
+        System.out.println("___________________________________________________________________");
         System.out.println("PARTICIONES ASIGNADAS: "+numPA+"                          AREAS LIBRES: "+numAL);
         System.out.println("-------------------------------------------------------------------");
         System.out.println("-------------------- PARTICIONES Y AREAS LIBRES -------------------");
         System.out.println("-------------------------------------------------------------------");
         System.out.println("Numero   Estado      Direccion      Tamaño     Limite      Proceso");
-        System.out.println("-------------------------------------------------------------------");
+        System.out.println("___________________________________________________________________");
+         System.out.println("SO"      +"        "+"            "+"1             "+so+"K         Sistema Operativo");
+         System.out.println("___________________________________________________________________");
         while(h.hasNext()){
-            Thread.sleep(500);
+            
+            Thread.sleep(100);
             Particion p = h.next();
+            int limit = p.limite - 1;
+            
             if(p.estado=='D'){
-                System.out.println(""+p.id+"        "+p.estado+"ISPONIBLE   "+p.base+"           "+p.tamanio+"         "+p.limite);
+                System.out.println(""+p.id+"        "+p.estado+"ISPONIBLE   "+p.base+"           "+p.tamanio+"K         "+limit);
             } else {
-                System.out.println(""+p.id+"        "+p.estado+"SIGNADO     "+p.base+"            "+p.tamanio+"         "+p.limite+"           P"+p.procesoAsig);
+                System.out.println(""+p.id+"        "+p.estado+"SIGNADO     "+p.base+"            "+p.tamanio+"K         "+limit+"           P"+p.procesoAsig);
             }
-            System.out.println("-------------------------------------------------------------------");
+            System.out.println("___________________________________________________________________");
+       
         }
     }
 }
