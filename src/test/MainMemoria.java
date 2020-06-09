@@ -48,48 +48,48 @@ public class MainMemoria {
 //        while(i.hasNext()){
 //            System.out.println(""+i.next());
 //        }
-        while(!Eventos.isEmpty()){
+        while(!Eventos.isEmpty()){              //Ciclo principal que espera las instrucciones
             
             
             String  evento = Eventos.get(0);
             StringTokenizer st = new StringTokenizer(evento, ",");
             String instr = st.nextToken();
             
-             //Acciones si el evento es llegada (Acciones del Administrador)
-            if (instr.equals("L")){
+            
+            if (instr.equals("L")){              //Acciones si el evento es llegada de un proceso
                 
                 String proceso = st.nextToken();
                 int tamanio = Integer.parseInt(st.nextToken());
                 
                 System.out.println("\n\n\nEvento: Llega  P"+proceso+"  requiere "+tamanio+"k");
-                if (AM.AsignaRAM(tamanio, proceso)) {
+                if (AM.AsignaRAM(tamanio, proceso)) {   //Si el AM pudó asignarle espacio al proceso sin hacer compactacion
                     System.out.println("");
                     Thread.sleep(100);
                     Eventos.remove(0);
                 }
-                else{
-                     /*Verificar que existe espacio suficiente para hacer la compactacion del area libre
-                    y hacer la compactacion
-                    */
-                    if(AM.ExisteEspacio(tamanio)){
+                else{                                   
+                                                        /*Verificar que existe espacio suficiente para hacer 
+                                                        la compactacion del area libre y hacer la compactacion
+                                                       */
+                    if(AM.ExisteEspacio(tamanio)){      //Verifica que si se hace la compactacion habrá espacio
                         AM.compactacion();
                         System.out.println("\n\n\nEvento: Llega  P"+proceso+"  requiere "+tamanio+"k");
                         AM.AsignaRAM(tamanio, proceso);
                          Eventos.remove(0);
                     }
-                    else{
-                        System.out.println("Memoria Insuficiente");
+                    else{                               //Si no existe espacio suficiente en la memoria
+                        System.out.println("Memoria Insuficiente"); //
                     }
                 }
                 AM.imprimeRAM();
                 }
-            //Acciones si el evento es Termina (Elimina el proceso y recuperacion de memoria)
-            if (instr.equals("T")){
+            
+            if (instr.equals("T")){                      //Acciones si el evento es Termina (Elimina el proceso y recuperacion de memoria)
                 String proceso = st.nextToken();
                 System.out.println("\n\n\nEvento: Termina P"+proceso+"");
-                AM.RecuperaMemoria(proceso);
+                AM.RecuperaMemoria(proceso);             //El AM Recupera la memoria del proceso terminado
                 Thread.sleep(100);
-                Eventos.remove(0);
+                Eventos.remove(0);                       //El AM remueve la instrucción ejecutada
                 AM.imprimeRAM();
             }
             

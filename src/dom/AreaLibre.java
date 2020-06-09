@@ -17,10 +17,7 @@ public class AreaLibre extends Particion{
         this.id = id;
         this.base = base;
         this.tamanio = tamanio;
-       
         this.limite = (this.base + this.tamanio);
-     
-        
         this.estado ='D';
         
     }
